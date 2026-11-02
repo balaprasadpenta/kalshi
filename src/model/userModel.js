@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  lockedUserBalance: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export const User = mongoose.model("User", userSchema);

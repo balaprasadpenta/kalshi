@@ -28,6 +28,9 @@ const marketSchema = new mongoose.Schema({
     enum: ["yes", "no", "null"],
     default: null,
   },
+  totalIssued: {
+    type: Number,
+  }
 });
 
 export const Market = mongoose.model("Market", marketSchema);
