@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const fillSchema = new mongoose.Schema({
-  tradeId: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
-  orderId: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
+  // tradeId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  // },
+  // orderId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  // },
   orderBookId: {
     type: mongoose.Schema.Types.ObjectId,
   },
@@ -22,8 +22,9 @@ const fillSchema = new mongoose.Schema({
   },
   type: {
     type: String,
+    enum: ["buy", "sell"],
   },
   isMaker: {
-    type: String,
+    type: Boolean,
   },
 });

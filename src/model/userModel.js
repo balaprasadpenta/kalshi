@@ -1,21 +1,25 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
   },
-
   password: {
     type: String,
     required: true,
   },
-  balance: {
+  role: {
+    type: String,
+    required: true,
+    enum: ["admin", "customer"],
+  },
+  usdBalance: {
     type: Number,
     default: 0,
   },
-  lockedUserBalance: {
+  lockedUsdBalance: {
     type: Number,
     default: 0,
   },

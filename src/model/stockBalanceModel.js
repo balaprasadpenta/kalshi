@@ -12,12 +12,13 @@ export const stockBalanceSchema = new mongoose.Schema({
   },
   type: {
     type: String,
+    enum: ["yes", "no"],
   },
   qty: {
     type: Number,
   },
   locked: {
-    type: String,
+    type: Boolean,
     enum: ["yes", "no"],
   },
 });

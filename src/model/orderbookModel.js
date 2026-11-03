@@ -3,12 +3,13 @@ import mongoose from "mongoose";
 const orderBookSchema = new mongoose.Schema({
   marketId: {
     type: String,
+    ref: "Market",
     required: true,
     unique: true,
   },
   type: {
     type: String,
-    enum: [],
+    enum: ["yes", "no"],
   },
 });
 

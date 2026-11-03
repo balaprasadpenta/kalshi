@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 const bidSchema = new mongoose.Schema({
     orderBookID: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "OrderBook",
     },
     userId: {
         type: String, 
@@ -10,6 +11,7 @@ const bidSchema = new mongoose.Schema({
     },
     stockType: {
         type: String, 
+        enum: ["yes", "no"],
     },
     price: {
         type: Number, 
@@ -18,12 +20,12 @@ const bidSchema = new mongoose.Schema({
     qty: {
         type: Number, 
     },
-    remainingQty: {
-        type: Number, 
-    },
-    status: {
-        type: String, 
-    }
+    // remainingQty: {
+    //     type: Number, 
+    // },
+    // status: {
+    //     type: String, 
+    // }
 })
 
 export const Bid = mongoose.model("Bid", bidSchema)

@@ -5,22 +5,9 @@ const marketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  initialWager: {
-    type: Number,
-    required: true,
-  },
-  bet: {
-    type: String,
-    enum: ["yes", "no"],
-    required: true,
-  },
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
-  },
-  expiry: {
-    type: Date,
     required: true,
   },
   resolution: {
@@ -30,7 +17,7 @@ const marketSchema = new mongoose.Schema({
   },
   totalIssued: {
     type: Number,
-  }
+  },
 });
 
 export const Market = mongoose.model("Market", marketSchema);

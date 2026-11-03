@@ -1,56 +1,71 @@
 import { User } from "../model/userModel.js";
 import { Market } from "../model/marketModel.js";
-import { WalletEvent } from "../model/WalletEventModel.js";
-import { Bet } from "../model/betModel.js";
 import { createMarketSchema, placeBetSchema } from "../types/marketTypes.js";
+import { OrderBook } from "../model/orderbookModel.js";
 
 export async function createMarket(req, res) {
+  const { title, creatorId } = createMarketSchema.parse(req.body);
+  if (!title) {
+    return res.status(400).json({
+      error: "market title is required",
+    });
+  }
   try {
-    const data = createMarketSchema.parse(req.body);
-
-    if (data.expiry <= new Date()) {
-      return res.status(400).json({
-        error: "invalid expiry",
-      });
-    }
-
-    const existingUser = await User.findById(req.userId);
-
-    if (!existingUser) {
-      return res.status(400).json({
-        error: "user not loggedin, please login to create market ",
-      });
-    }
-
-    if (existingUser && existingUser.balance < data.initialWager) {
-      return res.status(400).json({
-        error: "insufficient balance",
-      });
-    }
-
-    existingUser.balance -= data.initialWager;
-    await existingUser.save();
-
     const market = await Market.create({
-      ...data,
-      creatorId: existingUser._id,
+      creatorId,
+      title,
+      totalIssued: 0,
+      resolution: null,
     });
 
-    await WalletEvent.create({
-      userId: existingUser._id,
-      tx_type: "created",
-      externalId: { marketId: market._id },
-      amount: data.initialWager,
-    });
+    await OrderBook.create([
+      {
+        marketId: market._id,
+        type: "yes",
+      },
+      {
+        marketId: market._id,
+        type: "no",
+      },
+    ]);
+
     return res.status(201).json({
-      id: market._id,
+      message: "market created",
+      market: {
+        id: market._id,
+        creatorId: market.creatorId,
+        totalIssued: market.totalIssued,
+        resolution: market.resolution,
+      },
     });
   } catch (error) {
-    return res.status(400).json({
+    console.error("createmarket error", error);
+    return res.status(500).json({
       error: error.message,
+      message: "could not create market",
     });
   }
 }
+// create yes order for this market,
+async function createYesOrder(req, res) {
+  const { marketId, type, side, price, qty } = safeParse(req.body);
+  if (!marketId || !type || !side || !price || !qty) {
+    return res.status(400).json({
+      error: error.message,
+      message: "all the fields are must to create order",
+    });
+  }
+
+  if (market.resolution === "null") {
+    res.status(400).json({
+      error: "market is resolved, you cannot create order in a resolved market",
+    });
+    marketId.populate("Orderbook");
+  }
+}
+
+//create no order for this market
+async function createNoOrder(req, res) {}
 
 export async function getMarkets(req, res) {
   try {
@@ -138,7 +153,6 @@ export async function placeBet(req, res) {
   }
 }
 
-
 export async function getBets(req, res) {
   try {
     const bets = await Bet.find({ userId: req.userId }).populate("marketId");
@@ -151,4 +165,3 @@ export async function getBets(req, res) {
     });
   }
 }
-
