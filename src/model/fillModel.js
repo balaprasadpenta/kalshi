@@ -28,3 +28,5 @@ const fillSchema = new mongoose.Schema({
     type: Boolean,
   },
 });
+
+export const Fill = mongoose.model("Fill", fillSchema)

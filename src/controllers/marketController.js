@@ -46,23 +46,6 @@ export async function createMarket(req, res) {
     });
   }
 }
-// create yes order for this market,
-async function createYesOrder(req, res) {
-  const { marketId, type, side, price, qty } = safeParse(req.body);
-  if (!marketId || !type || !side || !price || !qty) {
-    return res.status(400).json({
-      error: error.message,
-      message: "all the fields are must to create order",
-    });
-  }
-
-  if (market.resolution === "null") {
-    res.status(400).json({
-      error: "market is resolved, you cannot create order in a resolved market",
-    });
-    marketId.populate("Orderbook");
-  }
-}
 
 //create no order for this market
 async function createNoOrder(req, res) {}

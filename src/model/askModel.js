@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const askSchema = new mongoose.Schema({
-  orderBookID: {
+  orderBookId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "OrderBook",
   },
